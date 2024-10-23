@@ -25,6 +25,15 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddTransient<IEventService, EventServices>();
 builder.Services.AddHttpClient<FacebookApiService>();
 
+builder.Services.AddCors(c =>
+{
+    c.AddPolicy("EeventoIgreja", policyBuild =>
+    {
+        policyBuild.WithOrigins("http://localhost:3000");
+        policyBuild.AllowAnyHeader();
+        policyBuild.AllowAnyMethod();
+    });
+});
 // Configure LoggingApiServiceDecorator
 builder.Services.AddTransient<IApiService>(provider =>
 {
@@ -43,6 +52,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCors("EeventoIgreja");
 
 app.UseAuthorization();
 
